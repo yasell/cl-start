@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { connect } from 'react-redux'
 
-function App() {
+import { entitiesContractsSelector } from './store/reducers/contracts/selectors'
+import './App.css'
+
+
+
+function App(props) {
+  console.log(props.stateEntities)
+  console.log('--- -- ---')
+  console.log(props.contractsEntities)
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        Hello world
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+const mapStateToProps = (store) => {
+  return {
+    stateEntities: store.entities,
+    contractsEntities: entitiesContractsSelector(store),
+  }
+}
+
+const mapDispatchToProps = {
+  // increment, decrement, reset
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
