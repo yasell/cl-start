@@ -4,9 +4,9 @@ import { START, SUCCESS, FAIL } from '../../constants/actions'
 
 
 export default store => next => action => {
-  const {postApi, postData, withAuth, ...rest} = action
+  const {getAPI, withAuth, ...rest} = action
 
-  if (!postApi && !postData) return next({withAuth, ...rest})
+  if (!getAPI) return next({withAuth, ...rest})
 
   let config = {}
 
@@ -16,13 +16,14 @@ export default store => next => action => {
 
   next({...rest, type: rest.type + START})
 
-  axios.post(postApi, postData, config)
+  axios.get(getAPI, config)
     .then(res => res.data)
     .then(res => {
       console.log(res)
       next({...rest, type: rest.type + SUCCESS, response: res})
     })
     .catch(error => {
+      console.log({error})
       next({...rest, type: rest.type + FAIL, error})
     })
 }

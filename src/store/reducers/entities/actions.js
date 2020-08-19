@@ -1,4 +1,3 @@
-// Counter AC
 import * as types from './types'
 
 export const increment = () => ({

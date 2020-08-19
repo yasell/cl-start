@@ -1,11 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 
 import rootReducer from './reducers'
-import api from './middlewares/api'
+import get from './middlewares/get'
 import post from './middlewares/post'
 
 
-const middlewares = [] //api
+const middlewares = [get]
 let composeEnhancers = compose
 
 if (process.env.NODE_ENV === 'development') {

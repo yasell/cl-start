@@ -2,20 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { entitiesContractsSelector } from './store/reducers/contracts/selectors'
+import MainRouter from './modules/MainRouter'
 import './App.css'
 
 
 
 function App(props) {
-  console.log(props.stateEntities)
-  console.log('--- -- ---')
-  console.log(props.contractsEntities)
+  console.log(props)
 
   return (
     <div className="App">
-      <header className="App-header">
-        Hello world
-      </header>
+      <MainRouter {...props} />
     </div>
   )
 }
