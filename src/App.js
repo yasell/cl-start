@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 
 import { entitiesContractsSelector } from './store/reducers/contracts/selectors'
 import MainRouter from './modules/MainRouter'
-import './App.css'
+
+import 'antd/dist/antd.css'
+import './styled/common.scss'
 
 
 
@@ -11,9 +13,7 @@ function App(props) {
   console.log(props)
 
   return (
-    <div className="App">
-      <MainRouter {...props} />
-    </div>
+    <MainRouter {...props} />
   )
 }
 

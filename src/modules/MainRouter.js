@@ -11,12 +11,10 @@ export default class MainRouter extends Component {
   render() {
     return (
       <Router>
-        <main role='main'>
-          <Switch>
-            <Route path={START_PAGE} exact strict component={StartPage} />
-            <Route component={ErrorPage} />
-          </Switch>
-        </main>
+        <Switch>
+          <Route path={START_PAGE} exact strict component={StartPage} />
+          <Route component={ErrorPage} />
+        </Switch>
       </Router>
     )
   }
