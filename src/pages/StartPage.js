@@ -5,12 +5,6 @@ import Header from '../components/Header'
 import BriefcaseTabs from '../components/BriefcaseTabs'
 
 import { getTemplatesList } from '../store/reducers/templates/actions'
-import {
-  foldersTemplatesSelector,
-  templatesTemplatesSelector,
-  loadingTemplatesSelector,
-  loadedTemplatesSelector
-} from '../store/reducers/templates/selectors'
 
 
 
@@ -30,11 +24,6 @@ class StartPage extends Component {
   render() {
     const error = this.state.error
 
-    console.log(this.props.foldersEntities)
-    console.log(this.props.templatesEntities)
-    // console.log(this.props.templatesLoaded)
-    // console.log(this.props.templatesLoading)
-
     return (
       <>
         <Header />
@@ -48,14 +37,7 @@ class StartPage extends Component {
 }
 
 export default connect(
-  store => {
-    return {
-      foldersEntities: foldersTemplatesSelector(store),
-      templatesEntities: templatesTemplatesSelector(store),
-      templatesLoaded: loadedTemplatesSelector(store),
-      templatesLoading: loadingTemplatesSelector(store),
-    }
-  },
+  null,
   {
     getTemplatesList: getTemplatesList,
   }

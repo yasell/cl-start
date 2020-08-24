@@ -1,4 +1,4 @@
-import {OrderedMap} from 'immutable'
+import { List, OrderedMap } from 'immutable'
 
 export function arrToMap(arr, ItemRecord) {
   return arr.reduce(

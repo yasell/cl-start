@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Table, Menu, Dropdown, Button, Space } from 'antd'
 import { MoreOutlined } from '@ant-design/icons'
+
+import {
+  foldersTemplatesSelector,
+  templatesTemplatesSelector,
+  loadingTemplatesSelector,
+  loadedTemplatesSelector
+} from '../../store/reducers/templates/selectors'
 
 
 
@@ -35,9 +43,26 @@ function handleMenuClick({ key }) {
 class TemplatesTable extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      templates: []
+    }
   }
 
   componentDidMount() {}
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.templatesLoaded !== this.props.templatesLoaded && this.props.templatesLoaded && !this.props.templatesLoading) {
+      const entitiesMergedArray = [
+        ...this.props.foldersEntities,
+        ...this.props.templatesEntities
+      ]
+
+      this.setState({
+        templates: entitiesMergedArray.map(el => el.toJS())
+      })
+    }
+  }
 
   render() {
     return this.body
@@ -47,7 +72,7 @@ class TemplatesTable extends Component {
     const columns = this.props.tabKey === 1 ? [
       {
         title: 'Contract Name',
-        dataIndex: 'name',
+        dataIndex: 'title',
       },
       {
         title: 'Available usage',
@@ -256,6 +281,20 @@ class TemplatesTable extends Component {
           },
         ]
 
+    const tableData = this.state.templates.map((item) => {
+      if (item.children) {
+        if (!Array.isArray(item.children)) {
+          item.children = Object.keys(item.children).map(key => item.children[key])
+        }
+      }
+
+      return item
+    })
+
+    console.log(this.props.foldersEntities.map(el => el.toJS()))
+    console.log(this.props.templatesEntities.map(el => el.toJS()))
+    console.log('--- --- ---')
+
     return (
       <Table
         pagination={false}
@@ -263,11 +302,21 @@ class TemplatesTable extends Component {
           type: 'checkbox',
           ...rowSelection,
         }}
-        columns={columns}
-        dataSource={data}
+        columns={ columns }
+        dataSource={ tableData }
       />
     )
   }
 }
 
-export default TemplatesTable
+export default connect(
+  store => {
+    return {
+      foldersEntities: foldersTemplatesSelector(store),
+      templatesEntities: templatesTemplatesSelector(store),
+      templatesLoaded: loadedTemplatesSelector(store),
+      templatesLoading: loadingTemplatesSelector(store),
+    }
+  },
+  null
+)(TemplatesTable)

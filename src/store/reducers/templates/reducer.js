@@ -1,4 +1,4 @@
-import { OrderedMap, Record } from 'immutable'
+import { OrderedMap, List, Record } from 'immutable'
 import { START, SUCCESS, FAIL } from '../../../constants/actions'
 import { arrToMap } from '../../utils'
 import * as types from './types'
@@ -16,15 +16,17 @@ const TemplatesRecord = Record({
 
 const FolderRecord = Record({
   id: null,
+  key: null,
   parentId: null,
   title: null,
   chapter: null,
-  children: new OrderedMap({}),
+  children: new List([]),
   templates: new OrderedMap({}),
 })
 
 const TemplateRecord = Record({
   id: null,
+  key: null,
   folder_id: null,
   status: null,
   title: null,
@@ -46,23 +48,25 @@ const templates = (templates = new TemplatesRecord(), action) => {
       response.data.folders.forEach((folder) => {
         const folderData = {
           id: folder.id,
+          key: folder.id,
           parentId: folder.parent_id,
           title: folder.title,
           chapter: folder.chapter,
-          children: new OrderedMap({}),
+          children: new List([]),
         }
 
-        if (folder.children && folder.children.length) {
+        // folder sub-folder
+        if (folder.children && folder.children.length > 0) {
           const subFoldersData = []
 
-          // folder sub-folder
           folder.children.forEach((subFolder) => {
             const subFolderData = {
               id: subFolder.id,
+              key: subFolder.id,
               parentId: subFolder.parent_id,
               title: subFolder.title,
               chapter: subFolder.chapter,
-              children: new OrderedMap({}),
+              children: new List([]),
             }
 
             if (subFolder.templates && subFolder.templates.length) {
@@ -72,6 +76,7 @@ const templates = (templates = new TemplatesRecord(), action) => {
               subFolder.templates.forEach((template) => {
                 const templateData = {
                   id: template.id,
+                  key: template.id,
                   folder_id: template.folder_id,
                   status: template.status,
                   title: template.title,
@@ -90,13 +95,14 @@ const templates = (templates = new TemplatesRecord(), action) => {
         }
 
         // folder templates
-        if (folder.templates && folder.templates.length) {
+        if (folder.templates && folder.templates.length > 0) {
           const subFolderTemplateData = []
 
           // sub-folder templates
           folder.templates.forEach((template) => {
             const templateData = {
               id: template.id,
+              key: template.id,
               folder_id: template.folder_id,
               status: template.status,
               title: template.title,
@@ -114,6 +120,7 @@ const templates = (templates = new TemplatesRecord(), action) => {
       response.data.templates.forEach((template) => {
         const templateData = {
           id: template.id,
+          key: template.id,
           folder_id: template.folder_id,
           status: template.status,
           title: template.title,
