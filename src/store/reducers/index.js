@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux'
+import { connectRouter } from 'connected-react-router'
 
-// import authentication from './pages/reducer'
 import entities from './entities/reducer'
-import contracts from './contracts/reducer'
+import templates from './templates/reducer'
 
 
 
-const rootReducer = combineReducers({
-  contracts: contracts,
-  entities,
+const rootReducer = (history) => combineReducers({
+  templates: templates,
+  router: connectRouter(history)
 })
 
-export default rootReducer;
+export default rootReducer

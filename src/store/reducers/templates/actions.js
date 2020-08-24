@@ -12,14 +12,10 @@ export function addContract({data}) {
   }
 }
 
-export function getContracts() {
+export function getTemplatesList() {
   return {
-    type: types.GET_CONTRACTS,
-    getAPI: `${API}contracts/get`,
+    type: types.GET_TEMPLATES,
+    getAPI: `${API}folder/list/TEMPLATE`,
     withAuth: true
   }
 }
-
-// export const getCotracts = () => ({
-//   type: types.GET_CONTRACTS
-// })

@@ -19,7 +19,6 @@ export default store => next => action => {
   axios.post(postApi, postData, config)
     .then(res => res.data)
     .then(res => {
-      console.log(res)
       next({...rest, type: rest.type + SUCCESS, response: res})
     })
     .catch(error => {

@@ -35,13 +35,9 @@ function handleMenuClick({ key }) {
 class TemplatesTable extends Component {
   constructor(props) {
     super(props)
-
-    console.log(props)
   }
 
-  componentDidMount() {
-    console.log('Table componentDidMount')
-  }
+  componentDidMount() {}
 
   render() {
     return this.body

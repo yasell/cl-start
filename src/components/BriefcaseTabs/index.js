@@ -6,7 +6,8 @@ import TemplatesTable from '../TemplatesTable'
 
 const { TabPane } = Tabs
 
-const BriefcaseTabs = () => {
+const BriefcaseTabs = (props) => {
+
   return (
     <Tabs
       defaultActiveKey='1'

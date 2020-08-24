@@ -1,0 +1,3 @@
+export const GET_TEMPLATES = 'GET_TEMPLATES'
+
+export const ADD_CONTRACTS = 'ADD_CONTRACTS'
