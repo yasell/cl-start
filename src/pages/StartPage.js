@@ -5,7 +5,12 @@ import Header from '../components/Header'
 import BriefcaseTabs from '../components/BriefcaseTabs'
 
 import { getTemplatesList } from '../store/reducers/templates/actions'
-import { entitiesContractsSelector, loadingContractsSelector, loadedContractsSelector } from '../store/reducers/templates/selectors'
+import {
+  foldersTemplatesSelector,
+  templatesTemplatesSelector,
+  loadingTemplatesSelector,
+  loadedTemplatesSelector
+} from '../store/reducers/templates/selectors'
 
 
 
@@ -19,13 +24,13 @@ class StartPage extends Component {
   }
 
   componentDidMount() {
-    console.log('StartPage Mounted')
     this.props.getTemplatesList()
   }
 
   render() {
     const error = this.state.error
 
+    console.log(this.props.foldersEntities)
     console.log(this.props.templatesEntities)
     // console.log(this.props.templatesLoaded)
     // console.log(this.props.templatesLoading)
@@ -45,9 +50,10 @@ class StartPage extends Component {
 export default connect(
   store => {
     return {
-      templatesEntities: entitiesContractsSelector(store),
-      // templatesLoaded: loadedContractsSelector(store),
-      // templatesLoading: loadingContractsSelector(store),
+      foldersEntities: foldersTemplatesSelector(store),
+      templatesEntities: templatesTemplatesSelector(store),
+      templatesLoaded: loadedTemplatesSelector(store),
+      templatesLoading: loadingTemplatesSelector(store),
     }
   },
   {

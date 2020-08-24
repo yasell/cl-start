@@ -6,20 +6,28 @@ import * as types from './types'
 
 
 const TemplatesRecord = Record({
-  entities: new OrderedMap({}),
+  folders: new OrderedMap({}),
+  templates: new OrderedMap({}),
   loading: false,
   loaded: false,
   error: null,
   message: null,
 })
 
-const FoldersRecord = Record({
+const FolderRecord = Record({
   id: null,
   parentId: null,
   title: null,
   chapter: null,
   children: new OrderedMap({}),
   templates: new OrderedMap({}),
+})
+
+const TemplateRecord = Record({
+  id: null,
+  folder_id: null,
+  status: null,
+  title: null,
 })
 
 const templates = (templates = new TemplatesRecord(), action) => {
@@ -31,8 +39,10 @@ const templates = (templates = new TemplatesRecord(), action) => {
         .set('loading', true)
 
     case types.GET_TEMPLATES + SUCCESS:
+      const foldersData = []
       const templatesData = []
 
+      // folder
       response.data.folders.forEach((folder) => {
         const folderData = {
           id: folder.id,
@@ -40,14 +50,81 @@ const templates = (templates = new TemplatesRecord(), action) => {
           title: folder.title,
           chapter: folder.chapter,
           children: new OrderedMap({}),
-          templates: new OrderedMap({}),
         }
 
-        templatesData.push(folderData)
+        if (folder.children && folder.children.length) {
+          const subFoldersData = []
+
+          // folder sub-folder
+          folder.children.forEach((subFolder) => {
+            const subFolderData = {
+              id: subFolder.id,
+              parentId: subFolder.parent_id,
+              title: subFolder.title,
+              chapter: subFolder.chapter,
+              children: new OrderedMap({}),
+            }
+
+            if (subFolder.templates && subFolder.templates.length) {
+              const subFolderTemplateData = []
+
+              // folder sub-folder templates
+              subFolder.templates.forEach((template) => {
+                const templateData = {
+                  id: template.id,
+                  folder_id: template.folder_id,
+                  status: template.status,
+                  title: template.title,
+                }
+
+                subFolderTemplateData.push(templateData)
+
+                subFolderData.templates = arrToMap(subFolderTemplateData, TemplateRecord)
+              })
+            }
+
+            subFoldersData.push(subFolderData)
+
+            folderData.children = arrToMap(subFoldersData, FolderRecord)
+          })
+        }
+
+        // folder templates
+        if (folder.templates && folder.templates.length) {
+          const subFolderTemplateData = []
+
+          // sub-folder templates
+          folder.templates.forEach((template) => {
+            const templateData = {
+              id: template.id,
+              folder_id: template.folder_id,
+              status: template.status,
+              title: template.title,
+            }
+
+            subFolderTemplateData.push(templateData)
+
+            folderData.templates = arrToMap(subFolderTemplateData, TemplateRecord)
+          })
+        }
+
+        foldersData.push(folderData)
+      })
+
+      response.data.templates.forEach((template) => {
+        const templateData = {
+          id: template.id,
+          folder_id: template.folder_id,
+          status: template.status,
+          title: template.title,
+        }
+
+        templatesData.push(templateData)
       })
 
       return templates
-        .setIn(['entities'], arrToMap(templatesData, FoldersRecord))
+        .setIn(['folders'], arrToMap(foldersData, FolderRecord))
+        .setIn(['templates'], arrToMap(templatesData, TemplateRecord))
         .set('loaded', true)
         .set('loading', false)
 
