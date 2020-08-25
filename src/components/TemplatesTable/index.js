@@ -179,113 +179,25 @@ class TemplatesTable extends Component {
           },
         ]
 
-    const data = this.props.tabKey === 1 ? [
-      {
-        key: '1',
-        name: 'Life Rights Option Agreement',
-        usage: 3,
-        purchased: '7/26/2020 at 8:30 pm',
-        actions: 'Use'
-      },
-      {
-        key: '2',
-        name: 'Intellectual Property Assignment Agreement',
-        usage: 0,
-        purchased: '7/26/2020 at 8:30 pm',
-        actions: 'Renew'
-      },
-      {
-        key: '3',
-        name: 'Social Media Management Agreement',
-        usage: 1,
-        purchased: '7/26/2020 at 8:30 pm',
-        actions: 'Use'
-      },
-      {
-        key: '4',
-        name: 'Life Rights Option Agreement',
-        usage: 3,
-        purchased: '7/26/2020 at 8:30 pm',
-        actions: 'Use'
-      },
-    ] :
-      this.props.tabKey === 2 ? [
-          {
-            key: '1',
-            name: 'Intellectual Property Assignment Agreement (v03)',
-            updated: '7/26/2020 at 8:30 pm',
-            status: 'Draft',
-            actions: 'Edit'
-          },
-          {
-            key: '2',
-            name: 'Intellectual Property Assignment Agreement (v02)',
-            updated: '7/26/2020 at 8:30 pm',
-            status: 'Draft',
-            actions: 'Edit'
-          },
-          {
-            key: '3',
-            name: 'Life Rights Option Agreement  (Copy 2)',
-            updated: '7/26/2020 at 8:30 pm',
-            status: 'Draft',
-            actions: 'Edit'
-          },
-        ] :
-        [
-          {
-            key: '1',
-            name: 'Project 1',
-            updated: '',
-            status: '',
-            actions: '',
-            children: [
-              {
-                key: '2',
-                name: 'Intellectual Property Agreement',
-                updated: '7/26/2020 at 8:30 pm',
-                status: 'Completed',
-                actions: 'View',
-              },
-              {
-                key: '3',
-                name: 'Social Media Agreement',
-                updated: '7/26/2020 at 8:30 pm',
-                status: 'Completed',
-                actions: 'View',
-              },
-            ]
-          },
-          {
-            key: '4',
-            name: 'Project 2',
-            updated: '',
-            status: '',
-            actions: '',
-            children: [
-              {
-                key: '5',
-                name: 'Life Rights Option Agreement  (Copy 3)',
-                updated: '7/26/2020 at 8:30 pm',
-                status: 'Completed',
-                actions: 'View'
-              },
-              {
-                key: '6',
-                name: 'Intellectual Property Assignment Agreement (v01)',
-                updated: '7/26/2020 at 8:30 pm',
-                status: 'Completed',
-                actions: 'View'
-              },
-            ]
-          },
-        ]
-
     const tableData = this.state.templates.map((item) => {
+      // init children array
       if (item.children) {
         if (!Array.isArray(item.children)) {
           item.children = Object.keys(item.children).map(key => item.children[key])
+
+          item.children.map((el) => {
+            if (el.templates) {
+              Object.keys(el.templates).map((key, index) => el.children.push(el.templates[key]))
+            }
+
+            return el
+          })
         }
+      }
+
+      // add templates to children array
+      if (item.templates) {
+        Object.keys(item.templates).map((key, index) => item.children.push(item.templates[key]))
       }
 
       return item
@@ -294,6 +206,7 @@ class TemplatesTable extends Component {
     console.log(this.props.foldersEntities.map(el => el.toJS()))
     console.log(this.props.templatesEntities.map(el => el.toJS()))
     console.log('--- --- ---')
+    console.log( tableData )
 
     return (
       <Table
