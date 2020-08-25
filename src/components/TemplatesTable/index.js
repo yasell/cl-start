@@ -38,9 +38,6 @@ class TemplatesTable extends Component {
   componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log(prevProps)
-    console.log(this.props)
-
     if (
       prevProps.foldersEntities.length !== this.props.foldersEntities.length ||
       prevProps.templatesEntities.length !== this.props.templatesEntities.length ||

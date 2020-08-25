@@ -1,13 +1,14 @@
 import { combineReducers } from 'redux'
 import { connectRouter } from 'connected-react-router'
 
-import entities from './entities/reducer'
 import templates from './templates/reducer'
+import templatesInProgress from './templatesInProgress/reducer'
 
 
 
 const rootReducer = (history) => combineReducers({
   templates: templates,
+  templatesInProgress: templatesInProgress,
   router: connectRouter(history)
 })
 
