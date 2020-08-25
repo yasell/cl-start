@@ -1,6 +1,8 @@
 import React from 'react'
 import { Tabs } from 'antd'
+
 import TemplatesTable from '../TemplatesTable'
+import TemplatesInProgressTable from '../TemplatesInProgressTable'
 
 
 
@@ -13,26 +15,17 @@ const BriefcaseTabs = (props) => {
       defaultActiveKey='1'
       onChange={changeTabCallback}
     >
-      <TabPane
-        tab='Purchased Templates'
-        key='1'
-      >
+      <TabPane key='1' tab='Purchased Templates'>
         <TemplatesTable
           tabKey={1}
         />
       </TabPane>
-      <TabPane
-        tab='Contracts In Progress'
-        key='2'
-      >
-        <TemplatesTable
+      <TabPane key='2' tab='Contracts In Progress'>
+        <TemplatesInProgressTable
           tabKey={2}
         />
       </TabPane>
-      <TabPane
-        tab='Executed Contracts'
-        key='3'
-      >
+      <TabPane key='3' tab='Executed Contracts'>
         <TemplatesTable
           tabKey={3}
         />

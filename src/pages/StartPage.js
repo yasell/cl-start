@@ -18,7 +18,7 @@ class StartPage extends Component {
   }
 
   componentDidMount() {
-    this.props.getTemplatesList()
+    // this.props.getTemplatesList()
   }
 
   render() {
