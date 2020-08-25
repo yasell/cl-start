@@ -80,26 +80,35 @@ class TemplatesTable extends Component {
       },
       {
         title: 'Purchased on',
-        dataIndex: 'purchased',
+        dataIndex: 'date',
       },
       {
         title: 'Actions',
         dataIndex: 'actions',
-        render: () => (
-          <Space size='middle'>
-            <Button
-              type='primary'
-            >
-              USE
-            </Button>
+        render: (text, record, index) => {
+          return record.actions ?
+            <Space size='middle'>
+              <Button
+                type='primary'
+              >
+                USE
+              </Button>
+              <Dropdown
+                trigger={['click']}
+                overlay={ () => this.moreActionsMenu({id: record.id, title: record.title}) }>
+                <Button
+                  icon={<MoreOutlined />}
+                />
+              </Dropdown>
+            </Space> :
             <Dropdown
-              overlay={moreActionsMenu}>
+              trigger={['click']}
+              overlay={ () => this.moreActionsMenu({id: record.id, title: record.title}) }>
               <Button
                 icon={<MoreOutlined />}
               />
             </Dropdown>
-          </Space>
-        ),
+        },
       },
     ] :
       this.props.tabKey === 2 ? [
@@ -178,7 +187,6 @@ class TemplatesTable extends Component {
             }
           },
         ]
-
     const tableData = this.state.templates.map((item) => {
       // init children array
       if (item.children) {
@@ -203,8 +211,8 @@ class TemplatesTable extends Component {
       return item
     })
 
-    console.log(this.props.foldersEntities.map(el => el.toJS()))
-    console.log(this.props.templatesEntities.map(el => el.toJS()))
+    // console.log(this.props.foldersEntities.map(el => el.toJS()))
+    // console.log(this.props.templatesEntities.map(el => el.toJS()))
     console.log('--- --- ---')
     console.log( tableData )
 
@@ -219,6 +227,32 @@ class TemplatesTable extends Component {
         dataSource={ tableData }
       />
     )
+  }
+
+  moreActionsMenu = (data) => {
+    return <Menu
+      // onClick={this.handleMenuClick}
+    >
+      <Menu.Item key='1' onClick={() => this.downloadClickHandler(data.id)}>
+        Download
+      </Menu.Item>
+      <Menu.Item key='2' onClick={() => this.deleteClickHandler(data.id)}>
+        Delete
+      </Menu.Item>
+    </Menu>
+  }
+
+  // handleMenuClick = ({ item, key }) => {
+  //   console.log(key)
+  //   console.log(item)
+  // }
+
+  downloadClickHandler = (id) => {
+    console.log(id)
+  }
+
+  deleteClickHandler = (id) => {
+    console.log(id)
   }
 }
 
