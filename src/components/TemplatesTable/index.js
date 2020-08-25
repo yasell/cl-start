@@ -7,23 +7,12 @@ import {
   foldersTemplatesSelector,
   templatesTemplatesSelector,
   loadingTemplatesSelector,
-  loadedTemplatesSelector
+  loadedTemplatesSelector,
+  deletedTemplatesSelector
 } from '../../store/reducers/templates/selectors'
+import { deleteContract } from '../../store/reducers/templates/actions'
 
 
-
-const moreActionsMenu = (
-  <Menu
-    onClick={handleMenuClick}
-  >
-    <Menu.Item key='1'>
-      Download
-    </Menu.Item>
-    <Menu.Item key='2'>
-      Delete
-    </Menu.Item>
-  </Menu>
-)
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
@@ -36,30 +25,62 @@ const rowSelection = {
   }),
 }
 
-function handleMenuClick({ key }) {
-  console.log('click', key)
-}
-
 class TemplatesTable extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      templates: []
+      templates: [],
+      tableData: []
     }
   }
 
   componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.templatesLoaded !== this.props.templatesLoaded && this.props.templatesLoaded && !this.props.templatesLoading) {
+    console.log(prevProps)
+    console.log(this.props)
+
+    if (
+      prevProps.foldersEntities.length !== this.props.foldersEntities.length ||
+      prevProps.templatesEntities.length !== this.props.templatesEntities.length ||
+      prevProps.templatesDeleted !== this.props.templatesDeleted && this.props.templatesDeleted
+    ) {
       const entitiesMergedArray = [
         ...this.props.foldersEntities,
         ...this.props.templatesEntities
       ]
 
+      console.log('Yo yo!')
+
       this.setState({
         templates: entitiesMergedArray.map(el => el.toJS())
+      }, () => {
+        this.setState({
+          tableData: this.state.templates.map((item) => {
+            // init children array
+            if (item.children) {
+              if (!Array.isArray(item.children)) {
+                item.children = Object.keys(item.children).map(key => item.children[key])
+
+                item.children.map((el) => {
+                  if (el.templates) {
+                    Object.keys(el.templates).map((key, index) => el.children.push(el.templates[key]))
+                  }
+
+                  return el
+                })
+              }
+            }
+
+            // add templates to children array
+            if (item.templates) {
+              Object.keys(item.templates).map((key, index) => item.children.push(item.templates[key]))
+            }
+
+            return item
+          })
+        })
       })
     }
   }
@@ -95,7 +116,11 @@ class TemplatesTable extends Component {
               </Button>
               <Dropdown
                 trigger={['click']}
-                overlay={ () => this.moreActionsMenu({id: record.id, title: record.title}) }>
+                overlay={ () => this.moreActionsMenu({
+                  id: record.id,
+                  parentId: record.parentId,
+                  folderId: record.folder_id
+                }) }>
                 <Button
                   icon={<MoreOutlined />}
                 />
@@ -103,7 +128,11 @@ class TemplatesTable extends Component {
             </Space> :
             <Dropdown
               trigger={['click']}
-              overlay={ () => this.moreActionsMenu({id: record.id, title: record.title}) }>
+              overlay={ () => this.moreActionsMenu({
+                id: record.id,
+                parentId: record.parentId,
+                folderId: record.folder_id
+              }) }>
               <Button
                 icon={<MoreOutlined />}
               />
@@ -131,7 +160,7 @@ class TemplatesTable extends Component {
           {
             title: 'Actions',
             dataIndex: 'actions',
-            render: () => (
+            render: (record) => (
               <Space size='middle'>
                 <Button
                   type='primary'
@@ -139,7 +168,7 @@ class TemplatesTable extends Component {
                   EDIT
                 </Button>
                 <Dropdown
-                  overlay={moreActionsMenu}>
+                  overlay={() => this.moreActionsMenu({id: record.id, parentId: record.parentId})}>
                   <Button
                     icon={<MoreOutlined />}
                   />
@@ -177,7 +206,7 @@ class TemplatesTable extends Component {
                     View
                   </Button>
                   <Dropdown
-                    overlay={moreActionsMenu}>
+                    overlay={() => this.moreActionsMenu({id: record.id, parentId: record.parentId})}>
                     <Button
                       icon={<MoreOutlined />}
                     />
@@ -187,34 +216,35 @@ class TemplatesTable extends Component {
             }
           },
         ]
-    const tableData = this.state.templates.map((item) => {
-      // init children array
-      if (item.children) {
-        if (!Array.isArray(item.children)) {
-          item.children = Object.keys(item.children).map(key => item.children[key])
 
-          item.children.map((el) => {
-            if (el.templates) {
-              Object.keys(el.templates).map((key, index) => el.children.push(el.templates[key]))
-            }
-
-            return el
-          })
-        }
-      }
-
-      // add templates to children array
-      if (item.templates) {
-        Object.keys(item.templates).map((key, index) => item.children.push(item.templates[key]))
-      }
-
-      return item
-    })
+    // const tableData = this.state.templates.map((item) => {
+    //   // init children array
+    //   if (item.children) {
+    //     if (!Array.isArray(item.children)) {
+    //       item.children = Object.keys(item.children).map(key => item.children[key])
+    //
+    //       item.children.map((el) => {
+    //         if (el.templates) {
+    //           Object.keys(el.templates).map((key, index) => el.children.push(el.templates[key]))
+    //         }
+    //
+    //         return el
+    //       })
+    //     }
+    //   }
+    //
+    //   // add templates to children array
+    //   if (item.templates) {
+    //     Object.keys(item.templates).map((key, index) => item.children.push(item.templates[key]))
+    //   }
+    //
+    //   return item
+    // })
 
     // console.log(this.props.foldersEntities.map(el => el.toJS()))
     // console.log(this.props.templatesEntities.map(el => el.toJS()))
     console.log('--- --- ---')
-    console.log( tableData )
+    console.log( this.state.tableData )
 
     return (
       <Table
@@ -224,7 +254,7 @@ class TemplatesTable extends Component {
           ...rowSelection,
         }}
         columns={ columns }
-        dataSource={ tableData }
+        dataSource={ this.state.tableData }
       />
     )
   }
@@ -233,10 +263,10 @@ class TemplatesTable extends Component {
     return <Menu
       // onClick={this.handleMenuClick}
     >
-      <Menu.Item key='1' onClick={() => this.downloadClickHandler(data.id)}>
+      <Menu.Item key='1' onClick={() => this.downloadClickHandler({id: data.id, parentId: data.parentId})}>
         Download
       </Menu.Item>
-      <Menu.Item key='2' onClick={() => this.deleteClickHandler(data.id)}>
+      <Menu.Item key='2' onClick={() => this.deleteClickHandler(data)}>
         Delete
       </Menu.Item>
     </Menu>
@@ -251,8 +281,8 @@ class TemplatesTable extends Component {
     console.log(id)
   }
 
-  deleteClickHandler = (id) => {
-    console.log(id)
+  deleteClickHandler = (data) => {
+    this.props.deleteContract(data)
   }
 }
 
@@ -263,7 +293,10 @@ export default connect(
       templatesEntities: templatesTemplatesSelector(store),
       templatesLoaded: loadedTemplatesSelector(store),
       templatesLoading: loadingTemplatesSelector(store),
+      templatesDeleted: deletedTemplatesSelector(store),
     }
   },
-  null
+  {
+    deleteContract: deleteContract,
+  }
 )(TemplatesTable)

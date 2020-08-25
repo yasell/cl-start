@@ -6,6 +6,7 @@ import rootReducer from './reducers'
 import history from '../store/history'
 import get from './middlewares/get'
 import post from './middlewares/post'
+import del from './middlewares/delete'
 
 
 
@@ -21,6 +22,7 @@ const configureStore = (preloadedState) => {
         thunk,
         get,
         post,
+        del
       )
     ),
   )

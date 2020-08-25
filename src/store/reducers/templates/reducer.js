@@ -10,6 +10,7 @@ const TemplatesRecord = Record({
   templates: new OrderedMap({}),
   loading: false,
   loaded: false,
+  deleted: false,
   error: null,
   message: null,
 })
@@ -138,7 +139,33 @@ const templates = (templates = new TemplatesRecord(), action) => {
     case types.GET_TEMPLATES + FAIL:
       return templates
         .set('error', error)
+        .set('message', error.response.data.message)
         .set('loading', false)
+
+    case types.DELETE_TEMPLATE + START:
+      return templates
+        .set('deleted', false)
+
+    case types.DELETE_TEMPLATE + SUCCESS:
+      const isFolder = !!payload.data.parentId || payload.data.parentId === 0
+
+      console.log(payload.data)
+      console.log(isFolder)
+
+      return templates
+        .set('deleted', true)
+        .deleteIn(isFolder ?
+          payload.data.parentId > 0 ?
+            ['folders', payload.data.parentId, 'children', payload.data.id] :
+            ['folders', payload.data.id] :
+          payload.data.folderId ?
+            ['folders', payload.data.folderId, 'templates', payload.data.id] :
+            ['templates', payload.data.id])
+
+    case types.DELETE_TEMPLATE + FAIL:
+      return templates
+        .set('error', error)
+        .set('message', error.response.data.message)
 
     default:
       return templates
