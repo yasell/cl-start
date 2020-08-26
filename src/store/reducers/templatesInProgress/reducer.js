@@ -49,7 +49,7 @@ const templatesInProgress = (templatesInProgress = new TemplatesRecord(), action
       response.data.folders.forEach((folder) => {
         const folderData = {
           id: folder.id,
-          key: folder.id,
+          key: `${folder.id}-${(~~(Math.random() * 1e8)).toString(16)}`,
           parentId: folder.parent_id,
           title: folder.title,
           chapter: folder.chapter,
@@ -63,7 +63,7 @@ const templatesInProgress = (templatesInProgress = new TemplatesRecord(), action
           folder.children.forEach((subFolder) => {
             const subFolderData = {
               id: subFolder.id,
-              key: subFolder.id,
+              key: `${subFolder.id}-${(~~(Math.random() * 1e8)).toString(16)}`,
               parentId: subFolder.parent_id,
               title: subFolder.title,
               chapter: subFolder.chapter,
@@ -77,7 +77,7 @@ const templatesInProgress = (templatesInProgress = new TemplatesRecord(), action
               subFolder.templates.forEach((template) => {
                 const templateData = {
                   id: template.id,
-                  key: template.id,
+                  key: `${template.id}-${(~~(Math.random() * 1e8)).toString(16)}`,
                   folder_id: template.folder_id,
                   status: template.status,
                   title: template.title,
@@ -103,7 +103,7 @@ const templatesInProgress = (templatesInProgress = new TemplatesRecord(), action
           folder.templates.forEach((template) => {
             const templateData = {
               id: template.id,
-              key: template.id,
+              key: `${template.id}-${(~~(Math.random() * 1e8)).toString(16)}`,
               folder_id: template.folder_id,
               status: template.status,
               title: template.title,
@@ -121,7 +121,7 @@ const templatesInProgress = (templatesInProgress = new TemplatesRecord(), action
       response.data.templates.forEach((template) => {
         const templateData = {
           id: template.id,
-          key: template.id,
+          key: `${template.id}-${(~~(Math.random() * 1e8)).toString(16)}`,
           folder_id: template.folder_id,
           status: template.status,
           title: template.title,

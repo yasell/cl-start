@@ -1,0 +1,1 @@
+export const GET_SENT_TEMPLATES = 'GET_SENT_TEMPLATES'

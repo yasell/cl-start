@@ -3,6 +3,7 @@ import { Tabs } from 'antd'
 
 import TemplatesTable from '../TemplatesTable'
 import TemplatesInProgressTable from '../TemplatesInProgressTable'
+import TemplatesSentTable from '../TemplatesSentTable'
 
 
 
@@ -26,7 +27,7 @@ const BriefcaseTabs = (props) => {
         />
       </TabPane>
       <TabPane key='3' tab='Executed Contracts'>
-        <TemplatesTable
+        <TemplatesSentTable
           tabKey={3}
         />
       </TabPane>

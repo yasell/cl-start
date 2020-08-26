@@ -33,15 +33,15 @@ const TemplateRecord = Record({
   title: null,
 })
 
-const templates = (templates = new TemplatesRecord(), action) => {
+const templatesSent = (templatesSent = new TemplatesRecord(), action) => {
   const {type, response, error, payload} = action
 
   switch(type) {
-    case types.GET_TEMPLATES + START:
-      return templates
+    case types.GET_SENT_TEMPLATES + START:
+      return templatesSent
         .set('loading', true)
 
-    case types.GET_TEMPLATES + SUCCESS:
+    case types.GET_SENT_TEMPLATES + SUCCESS:
       const foldersData = []
       const templatesData = []
 
@@ -130,43 +130,21 @@ const templates = (templates = new TemplatesRecord(), action) => {
         templatesData.push(templateData)
       })
 
-      return templates
+      return templatesSent
         .setIn(['folders'], arrToMap(foldersData, FolderRecord))
         .setIn(['templates'], arrToMap(templatesData, TemplateRecord))
         .set('loaded', true)
         .set('loading', false)
 
-    case types.GET_TEMPLATES + FAIL:
-      return templates
+    case types.GET_SENT_TEMPLATES + FAIL:
+      return templatesSent
         .set('error', error)
         .set('message', error.response.data.message)
         .set('loading', false)
 
-    case types.DELETE_TEMPLATE + START:
-      return templates
-        .set('deleted', false)
-
-    case types.DELETE_TEMPLATE + SUCCESS:
-      const isFolder = !!payload.data.parentId || payload.data.parentId === 0
-
-      return templates
-        .set('deleted', true)
-        .deleteIn(isFolder ?
-          payload.data.parentId > 0 ?
-            ['folders', payload.data.parentId, 'children', payload.data.id] :
-            ['folders', payload.data.id] :
-          payload.data.folderId ?
-            ['folders', payload.data.folderId, 'templates', payload.data.id] :
-            ['templates', payload.data.id])
-
-    case types.DELETE_TEMPLATE + FAIL:
-      return templates
-        .set('error', error)
-        .set('message', error.response.data.message)
-
     default:
-      return templates
+      return templatesSent
   }
 }
 
-export default templates
+export default templatesSent

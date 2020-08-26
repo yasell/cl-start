@@ -4,13 +4,13 @@ import { Table, Menu, Dropdown, Button, Space } from 'antd'
 import { MoreOutlined } from '@ant-design/icons'
 
 import {
-  foldersTemplatesInProgressSelector,
-  templatesTemplatesInProgressSelector,
-  loadingTemplatesInProgressSelector,
-  loadedTemplatesInProgressSelector,
-  deletedTemplatesInProgressSelector
-} from '../../store/reducers/templatesInProgress/selectors'
-import { getInProgressTemplatesList } from '../../store/reducers/templatesInProgress/actions'
+  foldersTemplatesSentSelector,
+  templatesTemplatesSentSelector,
+  loadingTemplatesSentSelector,
+  loadedTemplatesSentSelector,
+  deletedTemplatesSentSelector
+} from '../../store/reducers/templatesSent/selectors'
+import { getSentTemplatesList } from '../../store/reducers/templatesSent/actions'
 
 
 
@@ -25,7 +25,7 @@ const rowSelection = {
   }),
 }
 
-class TemplatesInProgressTable extends Component {
+class TemplatesSentTable extends Component {
   constructor(props) {
     super(props)
 
@@ -36,7 +36,9 @@ class TemplatesInProgressTable extends Component {
   }
 
   componentDidMount() {
-    this.props.tabKey === 2 && this.props.getInProgressTemplatesList()
+    // console.log(this.props)
+
+    this.props.tabKey === 3 && this.props.getSentTemplatesList()
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -50,7 +52,7 @@ class TemplatesInProgressTable extends Component {
         ...this.props.templatesEntities
       ]
 
-      console.log('Yo yo 222 !')
+      console.log('Yo yo 333!')
 
       this.setState({
         templates: entitiesMergedArray.map(el => el.toJS())
@@ -90,51 +92,51 @@ class TemplatesInProgressTable extends Component {
 
   get body() {
     const columns = [
-          {
-            title: 'Contract Name',
-            dataIndex: 'title',
-            sorter: (a, b) => a.title.length - b.title.length,
-            sortDirections: ['descend'],
-          },
-          {
-            title: 'Last updated',
-            dataIndex: 'updated',
-            sorter: (a, b) => a.updated.length - b.updated.length,
-            sortDirections: ['descend'],
-          },
-          {
-            title: 'Status',
-            dataIndex: 'status',
-          },
-          {
-            title: 'Actions',
-            dataIndex: 'actions',
-            render: (text, record, index) => (
-              <Space size='middle'>
-                <Button
-                  type='primary'
-                >
-                  EDIT
-                </Button>
-                <Dropdown
-                  trigger={['click']}
-                  overlay={ () => this.moreActionsMenu({
-                    id: record.id,
-                    parentId: record.parentId,
-                    folderId: record.folder_id
-                  }) }>
-                  <Button
-                    icon={<MoreOutlined />}
-                  />
-                </Dropdown>
-              </Space>
-            ),
-          },
-        ]
+      {
+        title: 'Contract Name',
+        dataIndex: 'title',
+        sorter: (a, b) => a.title.length - b.title.length,
+        sortDirections: ['descend'],
+      },
+      {
+        title: 'Last updated',
+        dataIndex: 'updated',
+        sorter: (a, b) => a.updated.length - b.updated.length,
+        sortDirections: ['descend'],
+      },
+      {
+        title: 'Status',
+        dataIndex: 'status',
+      },
+      {
+        title: 'Actions',
+        dataIndex: 'actions',
+        render: (text, record, index) => {
+          return <Space size='middle'>
+            <Button
+              type='primary'
+            >
+              View
+            </Button>
+            <Dropdown
+              trigger={['click']}
+              overlay={ () => this.moreActionsMenu({
+                id: record.id,
+                parentId: record.parentId,
+                folderId: record.folder_id
+              }) }>
+              <Button
+                icon={<MoreOutlined />}
+              />
+            </Dropdown>
+          </Space>
+        }
+      },
+    ]
 
     // console.log(this.props.foldersEntities.map(el => el.toJS()))
     // console.log(this.props.templatesEntities.map(el => el.toJS()))
-    console.log('tableData is ...')
+    // console.log('--- --- ---')
     console.log( this.state.tableData )
 
     return (
@@ -180,14 +182,14 @@ class TemplatesInProgressTable extends Component {
 export default connect(
   store => {
     return {
-      foldersEntities: foldersTemplatesInProgressSelector(store),
-      templatesEntities: templatesTemplatesInProgressSelector(store),
-      templatesLoaded: loadedTemplatesInProgressSelector(store),
-      templatesLoading: loadingTemplatesInProgressSelector(store),
-      templatesDeleted: deletedTemplatesInProgressSelector(store),
+      foldersEntities: foldersTemplatesSentSelector(store),
+      templatesEntities: templatesTemplatesSentSelector(store),
+      templatesLoaded: loadedTemplatesSentSelector(store),
+      templatesLoading: loadingTemplatesSentSelector(store),
+      templatesDeleted: deletedTemplatesSentSelector(store),
     }
   },
   {
-    getInProgressTemplatesList: getInProgressTemplatesList,
+    getSentTemplatesList: getSentTemplatesList
   }
-)(TemplatesInProgressTable)
+)(TemplatesSentTable)
