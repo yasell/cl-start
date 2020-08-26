@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {Button, Dropdown, Menu, Space, Table} from 'antd'
-import {MoreOutlined} from '@ant-design/icons'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Button, Dropdown, Menu, Space, Table } from 'antd'
+import { MoreOutlined } from '@ant-design/icons'
 
 import {
   deletedTemplatesSelector,
@@ -88,6 +88,7 @@ class TemplatesTable extends Component {
   }
 
   get body() {
+    const { templatesLoading } = this.props
     const columns = [
       {
         title: 'Contract Name',
@@ -146,6 +147,7 @@ class TemplatesTable extends Component {
 
     return (
       <Table
+        loading={ templatesLoading }
         pagination={false}
         rowSelection={{
           type: 'checkbox',

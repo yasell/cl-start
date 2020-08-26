@@ -35,9 +35,7 @@ class TemplatesSentTable extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.tabKey === 3 && this.props.getSentTemplatesList()
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (
@@ -89,6 +87,7 @@ class TemplatesSentTable extends Component {
   }
 
   get body() {
+    const { templatesLoading } = this.props
     const columns = [
       {
         title: 'Contract Name',
@@ -139,6 +138,7 @@ class TemplatesSentTable extends Component {
 
     return (
       <Table
+        loading={ templatesLoading }
         pagination={false}
         rowSelection={{
           type: 'checkbox',

@@ -35,9 +35,7 @@ class TemplatesInProgressTable extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.tabKey === 2 && this.props.getInProgressTemplatesList()
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (
@@ -89,6 +87,7 @@ class TemplatesInProgressTable extends Component {
   }
 
   get body() {
+    const { templatesLoading } = this.props
     const columns = [
           {
             title: 'Contract Name',
@@ -139,6 +138,7 @@ class TemplatesInProgressTable extends Component {
 
     return (
       <Table
+        loading={templatesLoading}
         pagination={false}
         rowSelection={{
           type: 'checkbox',
