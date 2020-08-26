@@ -1,17 +1,16 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Table, Menu, Dropdown, Button, Space } from 'antd'
-import { MoreOutlined } from '@ant-design/icons'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {Button, Dropdown, Menu, Space, Table} from 'antd'
+import {MoreOutlined} from '@ant-design/icons'
 
 import {
+  deletedTemplatesSelector,
   foldersTemplatesSelector,
-  templatesTemplatesSelector,
-  loadingTemplatesSelector,
   loadedTemplatesSelector,
-  deletedTemplatesSelector
+  loadingTemplatesSelector,
+  templatesTemplatesSelector
 } from '../../store/reducers/templates/selectors'
-import { getTemplatesList, deleteContract } from '../../store/reducers/templates/actions'
-
+import { getTemplatesList, deleteTemplatesFolder } from '../../store/reducers/templates/actions'
 
 
 const rowSelection = {
@@ -36,8 +35,6 @@ class TemplatesTable extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.props)
-
     this.props.tabKey === 1 && this.props.getTemplatesList()
   }
 
@@ -161,6 +158,8 @@ class TemplatesTable extends Component {
   }
 
   moreActionsMenu = (data) => {
+    data.isFolder = data.parentId >= 0
+
     return <Menu
       // onClick={this.handleMenuClick}
     >
@@ -183,7 +182,7 @@ class TemplatesTable extends Component {
   }
 
   deleteClickHandler = (data) => {
-    this.props.deleteContract(data)
+    data.isFolder && this.props.deleteFolder(data)
   }
 }
 
@@ -199,6 +198,6 @@ export default connect(
   },
   {
     getTemplatesList: getTemplatesList,
-    deleteContract: deleteContract,
+    deleteFolder: deleteTemplatesFolder,
   }
 )(TemplatesTable)

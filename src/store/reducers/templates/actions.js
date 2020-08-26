@@ -11,18 +11,10 @@ export function getTemplatesList() {
   }
 }
 
-export function getCompleteTemplatesList() {
+export function deleteTemplatesFolder(data) {
   return {
-    type: types.GET_COMPLETE_TEMPLATES,
-    getAPI: `${API}folder/list/ENVELOPE_COMPLETE`,
-    withAuth: true
-  }
-}
-
-export function deleteContract(data) {
-  return {
-    type: types.DELETE_TEMPLATE,
-    deleteApi: `${API}folder/delete/0`, // ${templateId}
+    type: types.DELETE_TEMPLATE_FOLDER,
+    deleteApi: `${API}folder/delete/911`, // ${data.id}
     payload: {data},
     withAuth: true
   }

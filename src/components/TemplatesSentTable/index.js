@@ -10,7 +10,7 @@ import {
   loadedTemplatesSentSelector,
   deletedTemplatesSentSelector
 } from '../../store/reducers/templatesSent/selectors'
-import { getSentTemplatesList } from '../../store/reducers/templatesSent/actions'
+import { getSentTemplatesList, deleteTemplatesFolder } from '../../store/reducers/templatesSent/actions'
 
 
 
@@ -36,8 +36,6 @@ class TemplatesSentTable extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.props)
-
     this.props.tabKey === 3 && this.props.getSentTemplatesList()
   }
 
@@ -137,7 +135,7 @@ class TemplatesSentTable extends Component {
     // console.log(this.props.foldersEntities.map(el => el.toJS()))
     // console.log(this.props.templatesEntities.map(el => el.toJS()))
     // console.log('--- --- ---')
-    console.log( this.state.tableData )
+    // console.log( this.state.tableData )
 
     return (
       <Table
@@ -153,6 +151,8 @@ class TemplatesSentTable extends Component {
   }
 
   moreActionsMenu = (data) => {
+    data.isFolder = data.parentId >= 0
+
     return <Menu
       // onClick={this.handleMenuClick}
     >
@@ -175,7 +175,7 @@ class TemplatesSentTable extends Component {
   }
 
   deleteClickHandler = (data) => {
-    console.log(data)
+    data.isFolder && this.props.deleteFolder(data)
   }
 }
 
@@ -190,6 +190,7 @@ export default connect(
     }
   },
   {
-    getSentTemplatesList: getSentTemplatesList
+    getSentTemplatesList: getSentTemplatesList,
+    deleteFolder: deleteTemplatesFolder,
   }
 )(TemplatesSentTable)

@@ -10,7 +10,7 @@ import {
   loadedTemplatesInProgressSelector,
   deletedTemplatesInProgressSelector
 } from '../../store/reducers/templatesInProgress/selectors'
-import { getInProgressTemplatesList } from '../../store/reducers/templatesInProgress/actions'
+import { getInProgressTemplatesList, deleteTemplatesFolder } from '../../store/reducers/templatesInProgress/actions'
 
 
 
@@ -134,8 +134,8 @@ class TemplatesInProgressTable extends Component {
 
     // console.log(this.props.foldersEntities.map(el => el.toJS()))
     // console.log(this.props.templatesEntities.map(el => el.toJS()))
-    console.log('tableData is ...')
-    console.log( this.state.tableData )
+    // console.log('tableData is ...')
+    // console.log( this.state.tableData )
 
     return (
       <Table
@@ -151,6 +151,8 @@ class TemplatesInProgressTable extends Component {
   }
 
   moreActionsMenu = (data) => {
+    data.isFolder = data.parentId >= 0
+
     return <Menu
       // onClick={this.handleMenuClick}
     >
@@ -173,7 +175,7 @@ class TemplatesInProgressTable extends Component {
   }
 
   deleteClickHandler = (data) => {
-    console.log(data)
+    data.isFolder && this.props.deleteFolder(data)
   }
 }
 
@@ -189,5 +191,6 @@ export default connect(
   },
   {
     getInProgressTemplatesList: getInProgressTemplatesList,
+    deleteFolder: deleteTemplatesFolder,
   }
 )(TemplatesInProgressTable)

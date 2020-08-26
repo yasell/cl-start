@@ -142,6 +142,28 @@ const templatesSent = (templatesSent = new TemplatesRecord(), action) => {
         .set('message', error.response.data.message)
         .set('loading', false)
 
+    case types.DELETE_TEMPLATE_FOLDER + START:
+      return templatesSent
+        .set('deleted', false)
+
+    case types.DELETE_TEMPLATE_FOLDER + SUCCESS:
+      const isFolder = !!payload.data.parentId || payload.data.parentId === 0
+
+      return templatesSent
+        .set('deleted', true)
+        .deleteIn(isFolder ?
+          payload.data.parentId > 0 ?
+            ['folders', payload.data.parentId, 'children', payload.data.id] :
+            ['folders', payload.data.id] :
+          payload.data.folderId ?
+            ['folders', payload.data.folderId, 'templates', payload.data.id] :
+            ['templates', payload.data.id])
+
+    case types.DELETE_TEMPLATE_FOLDER + FAIL:
+      return templatesSent
+        .set('error', error)
+        .set('message', error.response.data.message)
+
     default:
       return templatesSent
   }
