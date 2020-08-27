@@ -7,6 +7,7 @@ import history from '../store/history'
 import get from './middlewares/get'
 import post from './middlewares/post'
 import del from './middlewares/delete'
+import put from './middlewares/put'
 
 
 
@@ -22,7 +23,8 @@ const configureStore = (preloadedState) => {
         thunk,
         get,
         post,
-        del
+        del,
+        put
       )
     ),
   )

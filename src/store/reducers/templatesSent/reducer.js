@@ -160,10 +160,10 @@ const templatesSent = (templatesSent = new TemplatesRecord(), action) => {
         .set('error', error)
         .set('message', error.response.data.message)
 
-    case types.ADD_TEMPLATE_FOLDER + START:
+    case types.ADD_SENT_TEMPLATE_FOLDER + START:
        return templatesSent
 
-    case types.ADD_TEMPLATE_FOLDER + SUCCESS:
+    case types.ADD_SENT_TEMPLATE_FOLDER + SUCCESS:
       const newFolder = [{
         id: response.data.folder_id,
         key: `${response.data.folder_id}-${(~~(Math.random() * 1e8)).toString(16)}`,
@@ -175,7 +175,25 @@ const templatesSent = (templatesSent = new TemplatesRecord(), action) => {
       return templatesSent
         .mergeIn(['folders'], arrToMap(newFolder, FolderRecord))
 
-    case types.ADD_TEMPLATE_FOLDER + FAIL:
+    case types.ADD_SENT_TEMPLATE_FOLDER + FAIL:
+      console.log({error})
+
+      return templatesSent
+        .set('error', error)
+        .set('message', error.message)
+
+    case types.UPDATE_SENT_TEMPLATE_FOLDER + START:
+      return templatesSent
+
+    case types.UPDATE_SENT_TEMPLATE_FOLDER + SUCCESS:
+      return templatesSent
+        .updateIn(['folders', payload.id],
+          (val) => {
+            return val.set('title', payload.title)
+          }
+        )
+
+    case types.UPDATE_SENT_TEMPLATE_FOLDER + FAIL:
       console.log({error})
 
       return templatesSent

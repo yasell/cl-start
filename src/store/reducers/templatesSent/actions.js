@@ -13,7 +13,7 @@ export function getSentTemplatesList() {
 
 export function addTemplatesFolder(data) {
   return {
-    type: types.ADD_TEMPLATE_FOLDER,
+    type: types.ADD_SENT_TEMPLATE_FOLDER,
     postAPI: `${API}folder/create`,
     payload: data,
     postData: data
@@ -26,5 +26,18 @@ export function deleteTemplatesFolder(data) {
     deleteAPI: `${API}folder/delete/${data.id}`,
     payload: {data},
     withAuth: true
+  }
+}
+
+export function updateTemplatesFolder(data) {
+  return {
+    type: types.UPDATE_SENT_TEMPLATE_FOLDER,
+    putAPI: `${API}folder/update/${data.id}`,
+    payload: data,
+    putData: {
+      title: data.title,
+      chapter: data.chapter,
+      parent_id: 0
+    }
   }
 }

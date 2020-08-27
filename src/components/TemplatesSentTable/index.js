@@ -11,7 +11,7 @@ import {
   deletedTemplatesSentSelector,
   createdTemplatesSentSelector
 } from '../../store/reducers/templatesSent/selectors'
-import { getSentTemplatesList, addTemplatesFolder, deleteTemplatesFolder } from '../../store/reducers/templatesSent/actions'
+import { getSentTemplatesList, addTemplatesFolder, deleteTemplatesFolder, updateTemplatesFolder } from '../../store/reducers/templatesSent/actions'
 import { REQUIRED_FIELD } from '../../constants/staticErrors'
 
 
@@ -330,13 +330,20 @@ class TemplatesSentTable extends Component {
       chapter: 'ENVELOPE_COMPLETE',
       parent_id: row.parentId
     }
+    const updateFolderData = {
+      id: row.id,
+      title: row.title,
+      chapter: 'ENVELOPE_COMPLETE'
+    }
 
     newData.splice(index, 1, { ...item, ...row })
 
     this.setState({
       tableData: newData,
     }, () => {
-      row.newFolder && this.props.addTemplatesFolder(newFolderData)
+      row.newFolder ?
+        this.props.addTemplatesFolder(newFolderData) :
+        this.props.updateTemplatesFolder(updateFolderData)
     })
   }
 }
@@ -356,5 +363,6 @@ export default connect(
     getSentTemplatesList: getSentTemplatesList,
     addTemplatesFolder: addTemplatesFolder,
     deleteFolder: deleteTemplatesFolder,
+    updateTemplatesFolder: updateTemplatesFolder
   }
 )(TemplatesSentTable)
