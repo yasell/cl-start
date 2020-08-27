@@ -11,10 +11,19 @@ export function getSentTemplatesList() {
   }
 }
 
+export function addTemplatesFolder(data) {
+  return {
+    type: types.ADD_TEMPLATE_FOLDER,
+    postAPI: `${API}folder/create`,
+    payload: data,
+    postData: data
+  }
+}
+
 export function deleteTemplatesFolder(data) {
   return {
-    type: types.DELETE_TEMPLATE_FOLDER,
-    deleteApi: `${API}folder/delete/911`, // ${data.id}
+    type: types.DELETE_SENT_TEMPLATE_FOLDER,
+    deleteAPI: `${API}folder/delete/${data.id}`,
     payload: {data},
     withAuth: true
   }

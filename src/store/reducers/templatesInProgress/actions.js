@@ -13,8 +13,8 @@ export function getInProgressTemplatesList() {
 
 export function deleteTemplatesFolder(data) {
   return {
-    type: types.DELETE_TEMPLATE_FOLDER,
-    deleteApi: `${API}folder/delete/911`, // ${data.id}
+    type: types.DELETE_PROGRESS_TEMPLATE_FOLDER,
+    deleteApi: `${API}folder/delete/${data.id}`,
     payload: {data},
     withAuth: true
   }

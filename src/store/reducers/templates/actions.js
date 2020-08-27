@@ -14,7 +14,7 @@ export function getTemplatesList() {
 export function deleteTemplatesFolder(data) {
   return {
     type: types.DELETE_TEMPLATE_FOLDER,
-    deleteApi: `${API}folder/delete/911`, // ${data.id}
+    deleteAPI: `${API}folder/delete/${data.id}`,
     payload: {data},
     withAuth: true
   }

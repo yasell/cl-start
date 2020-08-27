@@ -139,27 +139,23 @@ const templatesInProgress = (templatesInProgress = new TemplatesRecord(), action
     case types.GET_PROGRESS_TEMPLATES + FAIL:
       return templatesInProgress
         .set('error', error)
-        .set('message', error.response.data.message)
+        .set('message', error.message)
         .set('loading', false)
 
-    case types.DELETE_TEMPLATE_FOLDER + START:
+    case types.DELETE_PROGRESS_TEMPLATE_FOLDER + START:
       return templatesInProgress
         .set('deleted', false)
 
-    case types.DELETE_TEMPLATE_FOLDER + SUCCESS:
-      const isFolder = !!payload.data.parentId || payload.data.parentId === 0
-
+    case types.DELETE_PROGRESS_TEMPLATE_FOLDER + SUCCESS:
       return templatesInProgress
         .set('deleted', true)
-        .deleteIn(isFolder ?
+        .deleteIn(
           payload.data.parentId > 0 ?
             ['folders', payload.data.parentId, 'children', payload.data.id] :
-            ['folders', payload.data.id] :
-          payload.data.folderId ?
-            ['folders', payload.data.folderId, 'templates', payload.data.id] :
-            ['templates', payload.data.id])
+            ['folders', payload.data.id]
+        )
 
-    case types.DELETE_TEMPLATE_FOLDER + FAIL:
+    case types.DELETE_PROGRESS_TEMPLATE_FOLDER + FAIL:
       return templatesInProgress
         .set('error', error)
         .set('message', error.response.data.message)

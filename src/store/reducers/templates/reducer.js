@@ -139,7 +139,7 @@ const templates = (templates = new TemplatesRecord(), action) => {
     case types.GET_TEMPLATES + FAIL:
       return templates
         .set('error', error)
-        .set('message', error.response.data.message)
+        .set('message', error.message)
         .set('loading', false)
 
     case types.DELETE_TEMPLATE_FOLDER + START:
@@ -147,17 +147,13 @@ const templates = (templates = new TemplatesRecord(), action) => {
         .set('deleted', false)
 
     case types.DELETE_TEMPLATE_FOLDER + SUCCESS:
-      const isFolder = !!payload.data.parentId || payload.data.parentId === 0
-
       return templates
         .set('deleted', true)
-        .deleteIn(isFolder ?
+        .deleteIn(
           payload.data.parentId > 0 ?
             ['folders', payload.data.parentId, 'children', payload.data.id] :
-            ['folders', payload.data.id] :
-          payload.data.folderId ?
-            ['folders', payload.data.folderId, 'templates', payload.data.id] :
-            ['templates', payload.data.id])
+            ['folders', payload.data.id]
+        )
 
     case types.DELETE_TEMPLATE_FOLDER + FAIL:
       return templates

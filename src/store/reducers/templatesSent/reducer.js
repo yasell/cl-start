@@ -139,30 +139,48 @@ const templatesSent = (templatesSent = new TemplatesRecord(), action) => {
     case types.GET_SENT_TEMPLATES + FAIL:
       return templatesSent
         .set('error', error)
-        .set('message', error.response.data.message)
+        .set('message', error.message)
         .set('loading', false)
 
-    case types.DELETE_TEMPLATE_FOLDER + START:
+    case types.DELETE_SENT_TEMPLATE_FOLDER + START:
       return templatesSent
         .set('deleted', false)
 
-    case types.DELETE_TEMPLATE_FOLDER + SUCCESS:
-      const isFolder = !!payload.data.parentId || payload.data.parentId === 0
-
+    case types.DELETE_SENT_TEMPLATE_FOLDER + SUCCESS:
       return templatesSent
         .set('deleted', true)
-        .deleteIn(isFolder ?
+        .deleteIn(
           payload.data.parentId > 0 ?
             ['folders', payload.data.parentId, 'children', payload.data.id] :
-            ['folders', payload.data.id] :
-          payload.data.folderId ?
-            ['folders', payload.data.folderId, 'templates', payload.data.id] :
-            ['templates', payload.data.id])
+            ['folders', payload.data.id]
+        )
 
-    case types.DELETE_TEMPLATE_FOLDER + FAIL:
+    case types.DELETE_SENT_TEMPLATE_FOLDER + FAIL:
       return templatesSent
         .set('error', error)
         .set('message', error.response.data.message)
+
+    case types.ADD_TEMPLATE_FOLDER + START:
+       return templatesSent
+
+    case types.ADD_TEMPLATE_FOLDER + SUCCESS:
+      const newFolder = [{
+        id: response.data.folder_id,
+        key: `${response.data.folder_id}-${(~~(Math.random() * 1e8)).toString(16)}`,
+        parentId: 0,
+        chapter: 'ENVELOPE_COMPLETE',
+        title: payload.title,
+      }]
+
+      return templatesSent
+        .mergeIn(['folders'], arrToMap(newFolder, FolderRecord))
+
+    case types.ADD_TEMPLATE_FOLDER + FAIL:
+      console.log({error})
+
+      return templatesSent
+        .set('error', error)
+        .set('message', error.message)
 
     default:
       return templatesSent

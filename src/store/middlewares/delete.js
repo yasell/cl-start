@@ -4,9 +4,9 @@ import { START, SUCCESS, FAIL } from '../../constants/actions'
 
 
 export default store => next => action => {
-  const {deleteApi, withAuth, ...rest} = action
+  const {deleteAPI, withAuth, ...rest} = action
 
-  if (!deleteApi) return next(rest)
+  if (!deleteAPI) return next(rest)
 
   let config = {}
 
@@ -16,7 +16,7 @@ export default store => next => action => {
 
   next({...rest, type: rest.type + START})
 
-  axios.delete(deleteApi, config)
+  axios.delete(deleteAPI, config)
     .then(res => res.data)
     .then(response =>
       next({...rest, type: rest.type + SUCCESS, response: response})

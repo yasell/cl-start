@@ -42,8 +42,6 @@ class BriefcaseTabs extends Component {
   changeTabCallback = (key) => {
     const { getTemplatesList, getInProgressTemplatesList, getSentTemplatesList } = this.props
 
-    console.log('key...' + key)
-
     key === '1' ?
       getTemplatesList() :
       key === '2' ?
